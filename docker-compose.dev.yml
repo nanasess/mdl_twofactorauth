@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  ec-cube:
+    entrypoint: >
+      /bin/bash -c "
+      if [ $${DB_TYPE} == 'pgsql' ]; then /wait-for-pgsql.sh ls; else /wait-for-mysql.sh ls; fi &&
+      export PGPASSWORD=$${DB_PASSWORD} &&
+      if [ $${DB_TYPE} == 'pgsql' ]; then cat ../sql/setup.sql | psql -v -U $${DB_USER} -h $${DB_SERVER} -d $${DB_NAME}; else mysql -u $${DB_USER} -p$${DB_PASSWORD} -h $${DB_SERVER} $${DB_NAME} < ../sql/setup.sql; fi &&
+      sed -i \"s|define('OSTORE_URL', .*);|define('OSTORE_URL', 'http://ec-cube/test/');|g\" /var/www/app/data/mtb_constants_init.php &&
+      sed -i \"s|define('OSTORE_SSLURL', .*);|define('OSTORE_SSLURL', 'http://ec-cube/test/');|g\" /var/www/app/data/mtb_constants_init.php &&
+      apache2-foreground
+      "
+
+    volumes:
+      - ".:/var/www/app/data/downloads/module/mdl_sample"
+      - "./dockerbuild/sql:/var/www/sql:delegated"
+      - "./dockerbuild/index.php:/var/www/app/html/test/upgrade/index.php"
