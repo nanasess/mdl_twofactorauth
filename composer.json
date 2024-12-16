@@ -1,0 +1,5 @@
+{
+    "require": {
+        "nanasess/twofactorauth18": "^1.8"
+    }
+}
