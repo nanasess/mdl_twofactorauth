@@ -14,10 +14,7 @@ volumes:
 
 services:
   ec-cube:
-    # image: ghcr.io/ec-cube/ec-cube2-php:8.1-apache # 2.17.x
-    # image: ghcr.io/nanasess/ec-cube2-php:5.4-apache-2.13.5
-    # image: ghcr.io/nanasess/ec-cube2-php:5.4-apache-2.12.6
-    image: ghcr.io/nanasess/ec-cube2-php:5.4-apache-2.11.5
+    image: ghcr.io/ec-cube/ec-cube2-php:7.4-apache # 2.17.x
     volumes:
       ### 同期対象からコストの重いフォルダを除外 #####################
       - "vendor:/var/www/app/data/vendor"
